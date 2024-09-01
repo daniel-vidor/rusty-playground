@@ -30,9 +30,19 @@ enum Command {
 }
 
 fn main() {
-    let player = Player { pos: Position { x: 4, y: 4 } };
-    let map = Map { max_x: 12, max_y: 8 };
-    let mut gs = GameState { player: player, map: map };
+    let player = Player {
+        pos: Position { x: 4, y: 4 },
+    };
+
+    let map = Map {
+        max_x: 12,
+        max_y: 8,
+    };
+    
+    let mut gs = GameState {
+        player: player,
+        map: map,
+    };
 
     println!("Welcome to Rustlike, a Roguelike developed in Rust.");
 
@@ -80,13 +90,19 @@ fn process_player_move(x: i32, y: i32, gs: &mut GameState) {
         x: old_pos.x + x,
         y: old_pos.y + y,
     };
-    
-    println!("Player moving from [{}, {}] to [{}, {}]...", old_pos.x, old_pos.y, new_pos.x, new_pos.y);
-    
+
+    println!(
+        "Player moving from [{}, {}] to [{}, {}]...",
+        old_pos.x, old_pos.y, new_pos.x, new_pos.y
+    );
+
     if is_pos_in_bounds(&new_pos, gs.map.max_x, gs.map.max_y) {
         gs.player.pos = new_pos;
     } else {
-        println!("Cannot move to position [{}, {}]; it is out of bounds.", new_pos.x, new_pos.y);
+        println!(
+            "Cannot move to position [{}, {}]; it is out of bounds.",
+            new_pos.x, new_pos.y
+        );
     }
 }
 
