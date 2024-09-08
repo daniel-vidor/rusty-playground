@@ -1,9 +1,10 @@
 use std::io::{self, Write};
 use std::process;
+mod map;
 
 struct GameState {
     player: Player,
-    map: Map,
+    map: map::Grid,
 }
 
 // Origin (0, 0) is the top-left
@@ -17,11 +18,6 @@ struct Player {
     pos: Position,
 }
 
-struct Map {
-    max_x: i32,
-    max_y: i32,
-}
-
 enum Command {
     Move { x: i32, y: i32 },
     Wait,
@@ -29,19 +25,10 @@ enum Command {
     Unknown,
 }
 
-fn main() {
-    let player = Player {
-        pos: Position { x: 4, y: 4 },
-    };
-
-    let map = Map {
-        max_x: 12,
-        max_y: 8,
-    };
-    
-    let mut gs = GameState {
-        player: player,
-        map: map,
+fn main() {    
+    let mut default_game_state = GameState {
+        player: Player {pos: Position {x: 4, y: 4}},
+        map: map::Grid {max_x: 12, max_y: 8, tiles: vec![]},
     };
 
     println!("Welcome to Rustlike, a Roguelike developed in Rust.");
@@ -57,9 +44,9 @@ fn main() {
             .expect("Failed to read line");
         let trimmed_input = input.trim();
         let cmd = parse_input(trimmed_input);
-        process_command(cmd, &mut gs);
+        process_command(cmd, &mut default_game_state);
 
-        draw_screen(&gs);
+        draw_screen(&default_game_state);
     }
 }
 
@@ -124,7 +111,7 @@ fn draw_screen(gs: &GameState) {
                 print!(".");
             }
         }
-
+        
         println!("");
     }
 }
